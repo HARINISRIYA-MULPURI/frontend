@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Truffle Document</title>
+
+    <script src="..\node_modules\web3\dist\web3.min.js"></script>
+    
+</head>
+<body>
+    
+    <script>
+            var web3=new Web3();
+            web3.setProvider(new web3.providers.HttpProvider("http://127.0.0.1:7545"));
+            web3.eth.defaultAccount = web3.eth.accounts[0];
+
+            
+            var SimpleSmartContract = new web3.eth.Contract(                                                                  [
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getName",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "new_name",
+          "type": "string"
+        }
+      ],
+      "name": "setName",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ], '0x6896dC0275E2Bdf37d1a21D251FD6C599c91B97f');
+
+         async function showFunction() {
+         var n = await SimpleSmartContract.methods.getName().call();
+        document.getElementById("getnamebox").value = n;
+  }
+
+          async function updateFunction(){
+          var account = await web3.eth.getAccounts().then(accounts=>{return accounts[0]});
+          console.log(account);
+          var n = document.getElementById("setnamebox").value;
+          var eve = document.getElementById("setevent").value;
+          console.log("Thank You " + n + " You are registered in " + eve);
+          await SimpleSmartContract.methods.setName(n).send({from:account});
+          var strText = document.getElementById("setnamebox").value;          
+      var strText1 = document.getElementById("setevent").value;
+      var result ="Thank You " + strText + "You are registered in " + strText1;
+      document.getElementById('spanResult').textContent = result;
+  }
+
+</script>
+       
+
+<label for="fname">Enter Name:</label>
+<input type="text" id="setnamebox" name="name"><br><br>
+
+<label for="add">Enter Address:</label>
+<input type="text" id="setaddress" name="address"><br><br>
+
+<label for="event">Event Name:</label>
+<input type="text" id="setevent" name="event"><br><br>
+
+
+<button type="button" onclick= updateFunction()>Submit</button><br />
+<span id="spanResult">
+</body>
+</html>
